@@ -1,0 +1,58 @@
+@startuml
+
+struct ElementId {
+    Id : string
+}
+
+interface IElement {
+    Id : ElementId
+}
+
+IElement ..> ElementId
+
+abstract class Element
+{
+    ~ Init(string, IModelingContext)
+    ~ AttachTo(IModelingContext)
+    ~ DetachFrom(IElement) : bool
+}
+
+Element -|> IElement
+Element ..> IModelingContext
+
+interface IModel {
+    + Get(ElementId) : IElement?
+    + Get<TElement>(ElementId) : TElement?
+    + Get<TElement>() : TElement[]
+}
+
+IModel ..> ElementId
+IModel ..> IElement
+
+interface IModelingContext {
+    + Register(IElement)
+    + Unregister(IElement)
+}
+
+IModelingContext ..> IElement
+
+class ModelingContext
+
+ModelingContext -|> IModelingContext
+
+class Model {
+    - context : ModelingContext
+    - elements : Dict<ElementId, Element>
+
+    + CreateNew<TElement>(string?) : TElement
+    + Attach<TElement>() : TElement
+    ~ Add(IElement)
+    ~ Remove(IElement)
+}
+
+Model -|> IModel
+Model -> ModelingContext
+Model ..> ElementId
+Model ..> Element
+
+@enduml
