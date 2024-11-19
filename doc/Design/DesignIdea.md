@@ -24,18 +24,24 @@ class Model
         where TElement : Element
     {
         var element = new TElement();
-        element.Init(id ?? Guid.NewGuid(), ctx)
+        element.Init(id ?? Guid.NewGuid().ToString(), ctx)
         return element;
     }
 
     public TElement Attach(TElement)
-        where TElement : IElement
+        where TElement : Element
     {
+        // First, check if already attached
         element.AttachTo(ctx);
         return element;
     }
 
-    internal void Register(IElement element)
+    internal void Register(Element element)
+    {
+        //... some code
+    }
+
+    internal void Unregister(Element element)
     {
         //... some code
     }
@@ -43,9 +49,14 @@ class Model
 
 internal class ModelingContext(Model model) : IModelingContext
 {
-    internal void Register(IElement element)
+    internal void Register(Element element)
     {
         model.Register(element);
+    }
+
+    internal void Unregister(Element element)
+    {
+        model.Unregister(element);
     }
 }
 
@@ -58,6 +69,8 @@ abstract class Element : IElement
         Id = CreateIdWith(id);
         AttachTo(ctx);
     }
+
+    protected abstract ElementId CreateIdWith(string id);
 
     internal void AttachTo(IModelingContext ctx)
     {
