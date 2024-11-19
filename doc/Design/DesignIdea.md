@@ -18,7 +18,7 @@ model.Attach(endEvent)
 
 class Model
 {
-    private IModelingContext ctx = new ModelingContext(this);
+    private ModelingContext ctx = new ModelingContext(this);
 
     public TElement CreateNew<TElement>(string? id = null)
         where TElement : Element
@@ -31,7 +31,7 @@ class Model
     public TElement Attach(TElement)
         where TElement : IElement
     {
-        Register(element);
+        element.AttachTo(ctx);
         return element;
     }
 
@@ -55,9 +55,15 @@ abstract class Element : IElement
 
     internal void Init(string id, IModelingContext ctx)
     {
-        this.ctx = ctx;
         Id = CreateIdWith(id);
-        ctx.Register(this);
+        AttachTo(ctx);
+    }
+
+    internal void AttachTo(IModelingContext ctx)
+    {
+        this.ctx?.Unregister(this);
+        this.ctx = ctx;
+        this.ctx.Register(this);
     }
 }
 
