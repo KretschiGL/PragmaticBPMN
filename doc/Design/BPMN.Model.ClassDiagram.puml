@@ -1,5 +1,36 @@
 @startuml
 
+struct ElementId {
+    Id : string
+}
 
+interface IElement {
+    Id : ElementId
+}
+
+IElement ..> ElementId
+
+interface IModel {
+    + Get(ElementId) : IElement?
+    + Get<TElement>(ElementId) : TElement?
+    + Get<TElement>() : TElement[]
+}
+
+IModel ..> ElementId
+IModel ..> IElement
+
+interface IModelingContext {
+    ~ Register(IElement)
+    ~ Unregister(IElement)
+}
+
+class Model {
+    - elements : Dict<ElementId, IElement>
+}
+
+Model -|> IModel
+Model -|> IModelingContext
+Model ..> ElementId
+Model ..> IElement
 
 @enduml
