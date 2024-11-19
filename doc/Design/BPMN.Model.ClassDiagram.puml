@@ -55,4 +55,60 @@ Model -> ModelingContext
 Model ..> ElementId
 Model ..> Element
 
+abstract class Event {
+    Name : string
+}
+
+Event -|> Element
+
+class StartEvent {
+    Type : StartEventTypes
+}
+enum StartEventTypes
+
+StartEvent -|> Event
+StartEvent ..> StartEventTypes
+
+class EndEvent
+
+EndEvent -|> Event
+
+class IntermediateThrowingEvent
+
+IntermediateThrowingEvent -|> Event
+
+class IntermediateCatchingEvent 
+
+IntermediateCatchingEvent -|> Event
+
+class AttachedEvent {
+    IsBlocking : bool
+}
+
+AttachedEvent -|> Event
+
+abstract class Activity {
+    Name : string
+}
+
+Activity -|> Element
+
+class Task
+
+Task -|> Activity
+
+abstract class Gateway {
+    Decision : string
+}
+
+Gateway -|> Element
+
+class XORGateway
+
+XORGateway -|> Gateway
+
+class ParallelGateway
+
+ParallelGateway -|> Gateway
+
 @enduml
