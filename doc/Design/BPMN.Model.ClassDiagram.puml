@@ -48,17 +48,24 @@ class Model
 {
     - context : ModelingContext
     - elements : Dict<ElementId, Element>
+    - groups : Dict<GroupId, Group>
+    - pools : Dict<PoolId, Pool>
 
     + CreateNew<TElement>(string?) : TElement
-    + Attach<TElement>() : TElement
+    + CreateGroup(string?) : Group
+    + CreatePool(string?) : Pool
+    + Attach<TElement>(TElement) : TElement
+    + Attach(Group) : Group
+    + Attach(Pool) : Pool
     ~ Add(Element)
     ~ Remove(IElement)
 }
 
 Model ..|> IModel
 Model -> ModelingContext
-Model ..> ElementId
 Model ..> Element
+Model ..> Grouping.Group
+Model ..> Grouping.Pool
 
 package Events
 {
@@ -366,24 +373,30 @@ package Grouping
     class Group
     {
         Name : string
+
+        ~ Init(string, IModelingContext)
+        ~ AttachTo(IModelingContext)
     }
 
     struct GroupId
     GroupId --|> ElementId
 
-    Group --|> Element
+    Group ..|> IElement
     Group --> GroupId
     Group "*" -- "*" Element : Groups
 
     class Pool
     {
-        Name : string
+        + Name : string
+
+        ~ Init(string, IModelingContext)
+        ~ AttachTo(IModelingContext)
     }
 
     struct PoolId
     PoolId --|> ElementId
 
-    Pool --|> Element
+    Pool ..|> IElement
     Pool --> PoolId
 
     class Lane
