@@ -1,10 +1,12 @@
-@startuml
+@startuml BPMN Class Diagram
 
-struct ElementId {
+struct ElementId
+{
     Id : string
 }
 
-interface IElement {
+interface IElement
+{
     Id : ElementId
 }
 
@@ -17,10 +19,11 @@ abstract class Element
     ~ DetachFrom(IElement) : bool
 }
 
-Element -|> IElement
-Element ..> IModelingContext
+Element --|> IElement
+Element .> IModelingContext
 
-interface IModel {
+interface IModel 
+{
     + Get(ElementId) : IElement?
     + Get<TElement>(ElementId) : TElement?
     + Get<TElement>() : TElement[]
@@ -29,49 +32,62 @@ interface IModel {
 IModel ..> ElementId
 IModel ..> IElement
 
-interface IModelingContext {
+interface IModelingContext
+{
     + Register(IElement)
     + Unregister(IElement)
 }
 
-IModelingContext ..> IElement
+IModelingContext .> IElement
 
 class ModelingContext
 
-ModelingContext -|> IModelingContext
+ModelingContext --|> IModelingContext
 
-class Model {
+class Model
+{
     - context : ModelingContext
     - elements : Dict<ElementId, Element>
+    - groups : Dict<GroupId, Group>
+    - pools : Dict<PoolId, Pool>
 
     + CreateNew<TElement>(string?) : TElement
-    + Attach<TElement>() : TElement
-    ~ Add(IElement)
+    + CreateGroup(string?) : Group
+    + CreatePool(string?) : Pool
+    + Attach<TElement>(TElement) : TElement
+    + Attach(Group) : Group
+    + Attach(Pool) : Pool
+    ~ Add(Element)
     ~ Remove(IElement)
 }
 
 Model ..|> IModel
 Model -> ModelingContext
-Model ..> ElementId
 Model ..> Element
+Model ..> Grouping.Group
+Model ..> Grouping.Pool
 
-package Events {
+package Events
+{
 
-    abstract class Event {
+    abstract class Event
+    {
         Name : string
     }
 
     struct EventId
-    EventId -|> ElementId
+    EventId --|> ElementId
 
-    Event -|> Element
-    Event -> EventId
+    Event --|> Element
+    Event --> EventId
 
-    class StartEvent {
+    class StartEvent
+    {
         Type : StartEventTypes
     }
 
-    enum StartEventTypes {
+    enum StartEventTypes
+    {
         None
         Compensation
         Conditional
@@ -84,14 +100,16 @@ package Events {
         Timer
     }
 
-    StartEvent -|> Event
+    StartEvent --|> Event
     StartEvent ..> StartEventTypes
 
-    class EndEvent {
+    class EndEven
+    {
         Type : EndEventTypes
     }
 
-    enum EndEventTypes {
+    enum EndEventTypes
+    {
         None
         Cancel
         Compensation
@@ -103,14 +121,16 @@ package Events {
         Terminate
     }
 
-    EndEvent -|> Event
+    EndEvent --|> Event
     EndEvent ..> EndEventTypes
 
-    class IntermediateThrowingEvent {
+    class IntermediateThrowingEvent
+    {
         Type : IntermediateThrowingEventTypes
     }
 
-    enum IntermediateThrowingEventTypes {
+    enum IntermediateThrowingEventTypes
+    {
         None
         Compensation
         Escalating
@@ -120,14 +140,16 @@ package Events {
         Signal
     }
 
-    IntermediateThrowingEvent -|> Event
+    IntermediateThrowingEvent --|> Event
     IntermediateThrowingEvent ..> IntermediateThrowingEventTypes
 
-    class IntermediateCatchingEvent {
+    class IntermediateCatchingEvent
+    {
         Type : IntermediateCatchingEventTypes
     }
 
-    enum IntermediateCatchingEventTypes {
+    enum IntermediateCatchingEventTypes
+    {
         None
         Cancel
         Compensation
@@ -142,14 +164,16 @@ package Events {
         Timer
     }
 
-    IntermediateCatchingEvent -|> Event
+    IntermediateCatchingEvent --|> Event
     IntermediateCatchingEvent ..> IntermediateCatchingEventTypes
 
-    class InterruptingBoundaryEvent {
+    class InterruptingBoundaryEvent
+    {
         Type : InterruptingBoundaryEventTypes
     }
 
-    enum InterruptingBoundaryEventTypes {
+    enum InterruptingBoundaryEventTypes
+    {
         None
         Compensation
         Conditional
@@ -162,14 +186,16 @@ package Events {
         Timer
     }
 
-    InterruptingBoundaryEvent -|> Event
+    InterruptingBoundaryEvent --|> Event
     InterruptingBoundaryEvent ..> InterruptingBoundaryEventTypes
 
-    class NonInterruptingBoundaryEvent {
+    class NonInterruptingBoundaryEvent
+    {
         Type : NonInterruptingBoundaryEventTypes
     }
 
-    enum NonInterruptingBoundaryEventTypes {
+    enum NonInterruptingBoundaryEventTypes
+    {
         None
         Conditional
         Escalating
@@ -180,152 +206,206 @@ package Events {
         Timer
     }
 
-    NonInterruptingBoundaryEvent -|> Event
+    NonInterruptingBoundaryEvent --|> Event
     NonInterruptingBoundaryEvent ..> NonInterruptingBoundaryEventTypes
 
 }
 
-package Activities {
+package Activities
+{
 
-    abstract class Activity {
+    abstract class Activity
+    {
         Name : string
         IsLoop : bool
         Instances : InstanceTypes
         IsForCompensation : bool
     }
 
-    enum InstanceTypes {
+    enum InstanceTypes
+    {
         Undefined
         Sequential
         Parallel
     }
 
-    Activity -|> Element
+    Activity --|> Element
     Activity ..> InstanceTypes
 
     class Task
 
     struct TaskId
-    TaskId -|> ElementId
+    TaskId --|> ElementId
 
-    Task -|> Activity
-    Task -> TaskId
+    Task --|> Activity
+    Task --> TaskId
 
     class ServiceTask
 
-    ServiceTask -|> Task
+    ServiceTask --|> Task
 
     class SendTask
 
-    SendTask -|> Task
+    SendTask --|> Task
 
     class ReceiveTask
 
-    ReceiveTask -|> Task
+    ReceiveTask --|> Task
 
-    class UserTask {
+    class UserTask
+    {
         Owner : string
         Priority : int
     }
 
-    UserTask -|> Task
+    UserTask --|> Task
 
     class ManualTask
 
-    Manualtask -|> Task
+    Manualtask --|> Task
 
-    class BusinessRuleTask {
+    class BusinessRuleTask
+    {
         Implementation : string
     }
 
-    BusinessRuleTask -|> Task
+    BusinessRuleTask --|> Task
 
-    class ScriptTask {
+    class ScriptTask
+    {
         Format : string
         Script : string
     }
 
-    ScriptTask -|> Task
+    ScriptTask --|> Task
 
 }
 
-package Gateways {
+package Gateways
+{
 
-    abstract class Gateway {
+    abstract class Gateway
+    {
         Decision : string
     }
 
     struct GatewayId
-    GatewayId -|> ElementId
+    GatewayId --|> ElementId
 
-    Gateway -|> Element
-    Gateway -> GatewayId
+    Gateway --|> Element
+    Gateway --> GatewayId
 
     class ExclusiveGateway
 
-    ExclusiveGateway -|> Gateway
+    ExclusiveGateway --|> Gateway
 
     class EventBasedGateway
 
-    EventBasedGateway -|> Gateway
+    EventBasedGateway --|> Gateway
 
     class ParallelEventBasedGateway
 
-    ParallelEventBasedGateway -|> EventBasedGateway
+    ParallelEventBasedGateway --|> EventBasedGateway
 
     class InclusiveGateway
 
-    InclusiveGateway -|> Gateway
+    InclusiveGateway --|> Gateway
 
     class ComplexGateway
 
-    ComplexGateway -|> Gateway
+    ComplexGateway --|> Gateway
 
     class ParallelGateway
 
-    ParallelGateway -|> Gateway
+    ParallelGateway --|> Gateway
 
 }
 
-package Data {
+package Data
+{
 
-    interface IDataElement {
+    interface IDataElement
+    {
         Name : string
     }
 
-    IDataElement -|> IElement
+    IDataElement --|> IElement
 
     class DataObject
 
     struct DataObjectId
-    DataObjectId -|> ElementId
+    DataObjectId --|> ElementId
 
-    DataObject -|> Element
+    DataObject --|> Element
     DataObject ..|> IDataElement
-    DataObject -> DataObjectId
+    DataObject --> DataObjectId
 
     class DataStore
 
     struct DataStoreId
-    DataStoreId -|> ElementId
+    DataStoreId --|> ElementId
 
-    DataStore -|> Element
+    DataStore --|> Element
     DataStore ..|> IDataElement
-    DataStore -> DataStoreId
+    DataStore --> DataStoreId
 
 }
 
-package Annotations {
+package Annotations
+{
 
-    class Note {
+    class Note
+    {
         Content : string
     }
 
     struct NoteId
-    NoteId -|> ElementId
+    NoteId --|> ElementId
 
-    Note -|> Element
-    Note -> NoteId
+    Note --|> Element
+    Note --> NoteId
+
+}
+
+package Grouping
+{
+
+    class Group
+    {
+        Name : string
+
+        ~ Init(string, IModelingContext)
+        ~ AttachTo(IModelingContext)
+    }
+
+    struct GroupId
+    GroupId --|> ElementId
+
+    Group ..|> IElement
+    Group --> GroupId
+    Group "*" -- "*" Element : Groups
+
+    class Pool
+    {
+        + Name : string
+
+        ~ Init(string, IModelingContext)
+        ~ AttachTo(IModelingContext)
+    }
+
+    struct PoolId
+    PoolId --|> ElementId
+
+    Pool ..|> IElement
+    Pool --> PoolId
+
+    class Lane
+    {
+        Name : string
+    }
+
+    Pool *-- "1..*" Lane : Lanes
+    Lane "0..1" - "*" Element
 
 }
 
