@@ -64,28 +64,118 @@ Event -|> Element
 class StartEvent {
     Type : StartEventTypes
 }
-enum StartEventTypes
+
+enum StartEventTypes {
+    None
+    Message
+    Timer
+    Error
+    Escalating
+    Compensation
+    Conditional
+    Signal
+    Multiple
+    ParallelMultiple
+}
 
 StartEvent -|> Event
 StartEvent ..> StartEventTypes
 
-class EndEvent
-
-EndEvent -|> Event
-
-class IntermediateThrowingEvent
-
-IntermediateThrowingEvent -|> Event
-
-class IntermediateCatchingEvent 
-
-IntermediateCatchingEvent -|> Event
-
-class AttachedEvent {
-    IsBlocking : bool
+class EndEvent {
+    Type : EndEventTypes
 }
 
-AttachedEvent -|> Event
+enum EndEventTypes {
+    None
+    Message
+    Error
+    Escalating
+    Cancel
+    Compensation
+    Signal
+    Terminate
+    Multiple
+}
+
+EndEvent -|> Event
+EndEvent ..> EndEventTypes
+
+class IntermediateThrowingEvent {
+    Type : IntermediateThrowingEventTypes
+}
+
+enum IntermediateThrowingEventTypes {
+    None
+    Message
+    Escalating
+    Compensation
+    Link
+    Signal
+    Multiple
+}
+
+IntermediateThrowingEvent -|> Event
+IntermediateThrowingEvent ..> IntermediateThrowingEventTypes
+
+class IntermediateCatchingEvent {
+    Type : IntermediateCatchingEventTypes
+}
+
+enum IntermediateCatchingEventTypes {
+    None
+    Message
+    Timer
+    Error
+    Escalating
+    Cancel
+    Compensation
+    Conditional
+    Link
+    Signal
+    Multiple
+    ParallelMultiple
+}
+
+IntermediateCatchingEvent -|> Event
+IntermediateCatchingEvent ..> IntermediateCatchingEventTypes
+
+class InterruptingBoundaryEvent {
+    Type : InterruptingBoundaryEventTypes
+}
+
+enum InterruptingBoundaryEventTypes {
+    None
+    Message
+    Timer
+    Error
+    Escalating
+    Compensation
+    Conditional
+    Signal
+    Multiple
+    ParallelMultiple
+}
+
+InterruptingBoundaryEvent -|> Event
+InterruptingBoundaryEvent ..> InterruptingBoundaryEventTypes
+
+class NonInterruptingBoundaryEvent {
+    Type : NonInterruptingBoundaryEventTypes
+}
+
+enum NonInterruptingBoundaryEventTypes {
+    None
+    Message
+    Timer
+    Escalating
+    Conditional
+    Signal
+    Multiple
+    ParallelMultiple
+}
+
+NonInterruptingBoundaryEvent -|> Event
+NonInterruptingBoundaryEvent ..> NonInterruptingBoundaryEventTypes
 
 abstract class Activity {
     Name : string
