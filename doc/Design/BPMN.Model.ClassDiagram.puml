@@ -10,7 +10,7 @@ interface IElement
     Id : ElementId
 }
 
-IElement ..> ElementId
+IElement .> ElementId
 
 abstract class Element
 {
@@ -20,7 +20,7 @@ abstract class Element
 }
 
 Element --|> IElement
-Element .> IModelingContext
+Element ..> IModelingContext
 
 interface IModel 
 {
