@@ -287,4 +287,25 @@ package Gateways {
 
 }
 
+package Data {
+
+    abstract class DataElement
+    
+    struct DataId
+    DataId -|> ElementId
+
+    DataElement -|> Element
+    DataElement -> DataId
+
+
+    class DataObject
+
+    DataObject -|> DataElement
+
+    class DataStore
+
+    DataStore -|> DataElement
+
+}
+
 @enduml
