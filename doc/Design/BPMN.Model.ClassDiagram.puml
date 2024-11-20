@@ -50,7 +50,7 @@ class Model {
     ~ Remove(IElement)
 }
 
-Model -|> IModel
+Model ..|> IModel
 Model -> ModelingContext
 Model ..> ElementId
 Model ..> Element
