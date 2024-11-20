@@ -55,4 +55,236 @@ Model -> ModelingContext
 Model ..> ElementId
 Model ..> Element
 
+package Events {
+
+    abstract class Event {
+        Name : string
+    }
+
+    struct EventId
+    EventId -|> ElementId
+
+    Event -|> Element
+    Event -> EventId
+
+    class StartEvent {
+        Type : StartEventTypes
+    }
+
+    enum StartEventTypes {
+        None
+        Compensation
+        Conditional
+        Error
+        Escalating
+        Message
+        Multiple
+        ParallelMultiple
+        Signal
+        Timer
+    }
+
+    StartEvent -|> Event
+    StartEvent ..> StartEventTypes
+
+    class EndEvent {
+        Type : EndEventTypes
+    }
+
+    enum EndEventTypes {
+        None
+        Cancel
+        Compensation
+        Error
+        Escalating
+        Message
+        Multiple
+        Signal
+        Terminate
+    }
+
+    EndEvent -|> Event
+    EndEvent ..> EndEventTypes
+
+    class IntermediateThrowingEvent {
+        Type : IntermediateThrowingEventTypes
+    }
+
+    enum IntermediateThrowingEventTypes {
+        None
+        Compensation
+        Escalating
+        Link
+        Message
+        Multiple
+        Signal
+    }
+
+    IntermediateThrowingEvent -|> Event
+    IntermediateThrowingEvent ..> IntermediateThrowingEventTypes
+
+    class IntermediateCatchingEvent {
+        Type : IntermediateCatchingEventTypes
+    }
+
+    enum IntermediateCatchingEventTypes {
+        None
+        Cancel
+        Compensation
+        Conditional
+        Message
+        Error
+        Escalating
+        Link
+        Multiple
+        ParallelMultiple
+        Signal
+        Timer
+    }
+
+    IntermediateCatchingEvent -|> Event
+    IntermediateCatchingEvent ..> IntermediateCatchingEventTypes
+
+    class InterruptingBoundaryEvent {
+        Type : InterruptingBoundaryEventTypes
+    }
+
+    enum InterruptingBoundaryEventTypes {
+        None
+        Compensation
+        Conditional
+        Error
+        Escalating
+        Message
+        Multiple
+        ParallelMultiple
+        Signal
+        Timer
+    }
+
+    InterruptingBoundaryEvent -|> Event
+    InterruptingBoundaryEvent ..> InterruptingBoundaryEventTypes
+
+    class NonInterruptingBoundaryEvent {
+        Type : NonInterruptingBoundaryEventTypes
+    }
+
+    enum NonInterruptingBoundaryEventTypes {
+        None
+        Conditional
+        Escalating
+        Message
+        Multiple
+        ParallelMultiple
+        Signal
+        Timer
+    }
+
+    NonInterruptingBoundaryEvent -|> Event
+    NonInterruptingBoundaryEvent ..> NonInterruptingBoundaryEventTypes
+
+}
+
+package Activities {
+
+    abstract class Activity {
+        Name : string
+        IsLoop : bool
+        Instances : InstanceTypes
+        IsForCompensation : bool
+    }
+
+    enum InstanceTypes {
+        Undefined
+        Sequential
+        Parallel
+    }
+
+    Activity -|> Element
+    Activity ..> InstanceTypes
+
+    class Task
+
+    struct TaskId
+    TaskId -|> ElementId
+
+    Task -|> Activity
+    Task -> TaskId
+
+    class ServiceTask
+
+    ServiceTask -|> Task
+
+    class SendTask
+
+    SendTask -|> Task
+
+    class ReceiveTask
+
+    ReceiveTask -|> Task
+
+    class UserTask {
+        Owner : string
+        Priority : int
+    }
+
+    UserTask -|> Task
+
+    class ManualTask
+
+    Manualtask -|> Task
+
+    class BusinessRuleTask {
+        Implementation : string
+    }
+
+    BusinessRuleTask -|> Task
+
+    class ScriptTask {
+        Format : string
+        Script : string
+    }
+
+    ScriptTask -|> Task
+
+}
+
+package Gateways {
+
+    abstract class Gateway {
+        Decision : string
+    }
+
+    struct GatewayId
+    GatewayId -|> ElementId
+
+    Gateway -|> Element
+    Gateway -> GatewayId
+
+    class ExclusiveGateway
+
+    ExclusiveGateway -|> Gateway
+
+    class EventBasedGateway
+
+    EventBasedGateway -|> Gateway
+
+    class ParallelEventBasedGateway
+
+    ParallelEventBasedGateway -|> EventBasedGateway
+
+    class InclusiveGateway
+
+    InclusiveGateway -|> Gateway
+
+    class ComplexGateway
+
+    ComplexGateway -|> Gateway
+
+    class ParallelGateway
+
+    ParallelGateway -|> Gateway
+
+}
+
 @enduml
