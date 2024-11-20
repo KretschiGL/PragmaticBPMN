@@ -61,7 +61,11 @@ package Events {
         Name : string
     }
 
+    struct EventId
+    EventId -|> ElementId
+
     Event -|> Element
+    Event -> EventId
 
     class StartEvent {
         Type : StartEventTypes
@@ -201,7 +205,11 @@ package Activities {
 
     class Task
 
+    struct TaskId
+    TaskId -|> ElementId
+
     Task -|> Activity
+    Task -> TaskId
 
     class ServiceTask
 
@@ -247,7 +255,11 @@ package Gateways {
         Decision : string
     }
 
+    struct GatewayId
+    GatewayId -|> ElementId
+
     Gateway -|> Element
+    Gateway -> GatewayId
 
     class ExclusiveGateway
 
