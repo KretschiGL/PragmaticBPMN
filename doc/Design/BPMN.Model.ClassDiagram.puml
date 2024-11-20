@@ -193,9 +193,25 @@ abstract class Gateway {
 
 Gateway -|> Element
 
-class XORGateway
+class ExclusiveGateway
 
-XORGateway -|> Gateway
+ExclusiveGateway -|> Gateway
+
+class EventBasedGateway
+
+EventBasedGateway -|> Gateway
+
+class ParallelEventBasedGateway
+
+ParallelEventBasedGateway -|> EventBasedGateway
+
+class InclusiveGateway
+
+InclusiveGateway -|> Gateway
+
+class ComplexGateway
+
+ComplexGateway -|> Gateway
 
 class ParallelGateway
 
