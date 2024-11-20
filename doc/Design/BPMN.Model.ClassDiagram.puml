@@ -342,6 +342,23 @@ package Grouping {
     Group --> GroupId
     Group "*" -- "*" Element : Groups
 
+    class Pool {
+        Name : string
+    }
+
+    struct PoolId
+    PoolId --|> ElementId
+
+    Pool --|> Element
+    Pool --> PoolId
+
+    class Lane {
+        Name : string
+    }
+
+    Pool *-- "1..*" Lane : Lanes
+    Lane "0..1" - "*" Element
+
 }
 
 @enduml
