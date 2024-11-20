@@ -50,7 +50,7 @@ class Model {
     ~ Remove(IElement)
 }
 
-Model -|> IModel
+Model ..|> IModel
 Model -> ModelingContext
 Model ..> ElementId
 Model ..> Element
@@ -284,6 +284,48 @@ package Gateways {
     class ParallelGateway
 
     ParallelGateway -|> Gateway
+
+}
+
+package Data {
+
+    interface IDataElement {
+        Name : string
+    }
+
+    IDataElement -|> IElement
+
+    class DataObject
+
+    struct DataObjectId
+    DataObjectId -|> ElementId
+
+    DataObject -|> Element
+    DataObject ..|> IDataElement
+    DataObject -> DataObjectId
+
+    class DataStore
+
+    struct DataStoreId
+    DataStoreId -|> ElementId
+
+    DataStore -|> Element
+    DataStore ..|> IDataElement
+    DataStore -> DataStoreId
+
+}
+
+package Annotations {
+
+    class Note {
+        Content : string
+    }
+
+    struct NoteId
+    NoteId -|> ElementId
+
+    Note -|> Element
+    Note -> NoteId
 
 }
 
