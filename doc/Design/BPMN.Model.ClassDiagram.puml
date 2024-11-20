@@ -17,8 +17,8 @@ abstract class Element
     ~ DetachFrom(IElement) : bool
 }
 
-Element -|> IElement
-Element ..> IModelingContext
+Element --|> IElement
+Element .> IModelingContext
 
 interface IModel {
     + Get(ElementId) : IElement?
@@ -34,11 +34,11 @@ interface IModelingContext {
     + Unregister(IElement)
 }
 
-IModelingContext ..> IElement
+IModelingContext .> IElement
 
 class ModelingContext
 
-ModelingContext -|> IModelingContext
+ModelingContext --|> IModelingContext
 
 class Model {
     - context : ModelingContext
@@ -62,10 +62,10 @@ package Events {
     }
 
     struct EventId
-    EventId -|> ElementId
+    EventId --|> ElementId
 
-    Event -|> Element
-    Event -> EventId
+    Event --|> Element
+    Event --> EventId
 
     class StartEvent {
         Type : StartEventTypes
@@ -84,7 +84,7 @@ package Events {
         Timer
     }
 
-    StartEvent -|> Event
+    StartEvent --|> Event
     StartEvent ..> StartEventTypes
 
     class EndEvent {
@@ -103,7 +103,7 @@ package Events {
         Terminate
     }
 
-    EndEvent -|> Event
+    EndEvent --|> Event
     EndEvent ..> EndEventTypes
 
     class IntermediateThrowingEvent {
@@ -120,7 +120,7 @@ package Events {
         Signal
     }
 
-    IntermediateThrowingEvent -|> Event
+    IntermediateThrowingEvent --|> Event
     IntermediateThrowingEvent ..> IntermediateThrowingEventTypes
 
     class IntermediateCatchingEvent {
@@ -142,7 +142,7 @@ package Events {
         Timer
     }
 
-    IntermediateCatchingEvent -|> Event
+    IntermediateCatchingEvent --|> Event
     IntermediateCatchingEvent ..> IntermediateCatchingEventTypes
 
     class InterruptingBoundaryEvent {
@@ -162,7 +162,7 @@ package Events {
         Timer
     }
 
-    InterruptingBoundaryEvent -|> Event
+    InterruptingBoundaryEvent --|> Event
     InterruptingBoundaryEvent ..> InterruptingBoundaryEventTypes
 
     class NonInterruptingBoundaryEvent {
@@ -180,7 +180,7 @@ package Events {
         Timer
     }
 
-    NonInterruptingBoundaryEvent -|> Event
+    NonInterruptingBoundaryEvent --|> Event
     NonInterruptingBoundaryEvent ..> NonInterruptingBoundaryEventTypes
 
 }
@@ -200,52 +200,52 @@ package Activities {
         Parallel
     }
 
-    Activity -|> Element
+    Activity --|> Element
     Activity ..> InstanceTypes
 
     class Task
 
     struct TaskId
-    TaskId -|> ElementId
+    TaskId --|> ElementId
 
-    Task -|> Activity
-    Task -> TaskId
+    Task --|> Activity
+    Task --> TaskId
 
     class ServiceTask
 
-    ServiceTask -|> Task
+    ServiceTask --|> Task
 
     class SendTask
 
-    SendTask -|> Task
+    SendTask --|> Task
 
     class ReceiveTask
 
-    ReceiveTask -|> Task
+    ReceiveTask --|> Task
 
     class UserTask {
         Owner : string
         Priority : int
     }
 
-    UserTask -|> Task
+    UserTask --|> Task
 
     class ManualTask
 
-    Manualtask -|> Task
+    Manualtask --|> Task
 
     class BusinessRuleTask {
         Implementation : string
     }
 
-    BusinessRuleTask -|> Task
+    BusinessRuleTask --|> Task
 
     class ScriptTask {
         Format : string
         Script : string
     }
 
-    ScriptTask -|> Task
+    ScriptTask --|> Task
 
 }
 
@@ -256,34 +256,34 @@ package Gateways {
     }
 
     struct GatewayId
-    GatewayId -|> ElementId
+    GatewayId --|> ElementId
 
-    Gateway -|> Element
-    Gateway -> GatewayId
+    Gateway --|> Element
+    Gateway --> GatewayId
 
     class ExclusiveGateway
 
-    ExclusiveGateway -|> Gateway
+    ExclusiveGateway --|> Gateway
 
     class EventBasedGateway
 
-    EventBasedGateway -|> Gateway
+    EventBasedGateway --|> Gateway
 
     class ParallelEventBasedGateway
 
-    ParallelEventBasedGateway -|> EventBasedGateway
+    ParallelEventBasedGateway --|> EventBasedGateway
 
     class InclusiveGateway
 
-    InclusiveGateway -|> Gateway
+    InclusiveGateway --|> Gateway
 
     class ComplexGateway
 
-    ComplexGateway -|> Gateway
+    ComplexGateway --|> Gateway
 
     class ParallelGateway
 
-    ParallelGateway -|> Gateway
+    ParallelGateway --|> Gateway
 
 }
 
@@ -293,25 +293,25 @@ package Data {
         Name : string
     }
 
-    IDataElement -|> IElement
+    IDataElement --|> IElement
 
     class DataObject
 
     struct DataObjectId
-    DataObjectId -|> ElementId
+    DataObjectId --|> ElementId
 
-    DataObject -|> Element
+    DataObject --|> Element
     DataObject ..|> IDataElement
-    DataObject -> DataObjectId
+    DataObject --> DataObjectId
 
     class DataStore
 
     struct DataStoreId
-    DataStoreId -|> ElementId
+    DataStoreId --|> ElementId
 
-    DataStore -|> Element
+    DataStore --|> Element
     DataStore ..|> IDataElement
-    DataStore -> DataStoreId
+    DataStore --> DataStoreId
 
 }
 
@@ -322,10 +322,10 @@ package Annotations {
     }
 
     struct NoteId
-    NoteId -|> ElementId
+    NoteId --|> ElementId
 
-    Note -|> Element
-    Note -> NoteId
+    Note --|> Element
+    Note --> NoteId
 
 }
 
@@ -336,11 +336,11 @@ package Grouping {
     }
 
     struct GroupId
-    GroupId -|> ElementId
+    GroupId --|> ElementId
 
-    Group -|> Element
-    Group -> GroupId
-    Group "*" - "*" Element : Groups
+    Group --|> Element
+    Group --> GroupId
+    Group "*" -- "*" Element : Groups
 
 }
 
