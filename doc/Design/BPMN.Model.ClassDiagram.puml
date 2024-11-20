@@ -46,7 +46,7 @@ class Model {
 
     + CreateNew<TElement>(string?) : TElement
     + Attach<TElement>() : TElement
-    ~ Add(IElement)
+    ~ Add(Element)
     ~ Remove(IElement)
 }
 
