@@ -1,10 +1,12 @@
 @startuml
 
-struct ElementId {
+struct ElementId
+{
     Id : string
 }
 
-interface IElement {
+interface IElement
+{
     Id : ElementId
 }
 
@@ -20,7 +22,8 @@ abstract class Element
 Element --|> IElement
 Element .> IModelingContext
 
-interface IModel {
+interface IModel 
+{
     + Get(ElementId) : IElement?
     + Get<TElement>(ElementId) : TElement?
     + Get<TElement>() : TElement[]
@@ -29,7 +32,8 @@ interface IModel {
 IModel ..> ElementId
 IModel ..> IElement
 
-interface IModelingContext {
+interface IModelingContext
+{
     + Register(IElement)
     + Unregister(IElement)
 }
@@ -40,7 +44,8 @@ class ModelingContext
 
 ModelingContext --|> IModelingContext
 
-class Model {
+class Model
+{
     - context : ModelingContext
     - elements : Dict<ElementId, Element>
 
@@ -55,9 +60,11 @@ Model -> ModelingContext
 Model ..> ElementId
 Model ..> Element
 
-package Events {
+package Events
+{
 
-    abstract class Event {
+    abstract class Event
+    {
         Name : string
     }
 
@@ -67,11 +74,13 @@ package Events {
     Event --|> Element
     Event --> EventId
 
-    class StartEvent {
+    class StartEvent
+    {
         Type : StartEventTypes
     }
 
-    enum StartEventTypes {
+    enum StartEventTypes
+    {
         None
         Compensation
         Conditional
@@ -87,11 +96,13 @@ package Events {
     StartEvent --|> Event
     StartEvent ..> StartEventTypes
 
-    class EndEvent {
+    class EndEven
+    {
         Type : EndEventTypes
     }
 
-    enum EndEventTypes {
+    enum EndEventTypes
+    {
         None
         Cancel
         Compensation
@@ -106,11 +117,13 @@ package Events {
     EndEvent --|> Event
     EndEvent ..> EndEventTypes
 
-    class IntermediateThrowingEvent {
+    class IntermediateThrowingEvent
+    {
         Type : IntermediateThrowingEventTypes
     }
 
-    enum IntermediateThrowingEventTypes {
+    enum IntermediateThrowingEventTypes
+    {
         None
         Compensation
         Escalating
@@ -123,11 +136,13 @@ package Events {
     IntermediateThrowingEvent --|> Event
     IntermediateThrowingEvent ..> IntermediateThrowingEventTypes
 
-    class IntermediateCatchingEvent {
+    class IntermediateCatchingEvent
+    {
         Type : IntermediateCatchingEventTypes
     }
 
-    enum IntermediateCatchingEventTypes {
+    enum IntermediateCatchingEventTypes
+    {
         None
         Cancel
         Compensation
@@ -145,11 +160,13 @@ package Events {
     IntermediateCatchingEvent --|> Event
     IntermediateCatchingEvent ..> IntermediateCatchingEventTypes
 
-    class InterruptingBoundaryEvent {
+    class InterruptingBoundaryEvent
+    {
         Type : InterruptingBoundaryEventTypes
     }
 
-    enum InterruptingBoundaryEventTypes {
+    enum InterruptingBoundaryEventTypes
+    {
         None
         Compensation
         Conditional
@@ -165,11 +182,13 @@ package Events {
     InterruptingBoundaryEvent --|> Event
     InterruptingBoundaryEvent ..> InterruptingBoundaryEventTypes
 
-    class NonInterruptingBoundaryEvent {
+    class NonInterruptingBoundaryEvent
+    {
         Type : NonInterruptingBoundaryEventTypes
     }
 
-    enum NonInterruptingBoundaryEventTypes {
+    enum NonInterruptingBoundaryEventTypes
+    {
         None
         Conditional
         Escalating
@@ -185,16 +204,19 @@ package Events {
 
 }
 
-package Activities {
+package Activities
+{
 
-    abstract class Activity {
+    abstract class Activity
+    {
         Name : string
         IsLoop : bool
         Instances : InstanceTypes
         IsForCompensation : bool
     }
 
-    enum InstanceTypes {
+    enum InstanceTypes
+    {
         Undefined
         Sequential
         Parallel
@@ -223,7 +245,8 @@ package Activities {
 
     ReceiveTask --|> Task
 
-    class UserTask {
+    class UserTask
+    {
         Owner : string
         Priority : int
     }
@@ -234,13 +257,15 @@ package Activities {
 
     Manualtask --|> Task
 
-    class BusinessRuleTask {
+    class BusinessRuleTask
+    {
         Implementation : string
     }
 
     BusinessRuleTask --|> Task
 
-    class ScriptTask {
+    class ScriptTask
+    {
         Format : string
         Script : string
     }
@@ -249,9 +274,11 @@ package Activities {
 
 }
 
-package Gateways {
+package Gateways
+{
 
-    abstract class Gateway {
+    abstract class Gateway
+    {
         Decision : string
     }
 
@@ -287,9 +314,11 @@ package Gateways {
 
 }
 
-package Data {
+package Data
+{
 
-    interface IDataElement {
+    interface IDataElement
+    {
         Name : string
     }
 
@@ -315,9 +344,11 @@ package Data {
 
 }
 
-package Annotations {
+package Annotations
+{
 
-    class Note {
+    class Note
+    {
         Content : string
     }
 
@@ -329,9 +360,11 @@ package Annotations {
 
 }
 
-package Grouping {
+package Grouping
+{
 
-    class Group {
+    class Group
+    {
         Name : string
     }
 
@@ -342,7 +375,8 @@ package Grouping {
     Group --> GroupId
     Group "*" -- "*" Element : Groups
 
-    class Pool {
+    class Pool
+    {
         Name : string
     }
 
@@ -352,7 +386,8 @@ package Grouping {
     Pool --|> Element
     Pool --> PoolId
 
-    class Lane {
+    class Lane
+    {
         Name : string
     }
 
