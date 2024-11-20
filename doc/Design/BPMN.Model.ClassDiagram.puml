@@ -329,4 +329,19 @@ package Annotations {
 
 }
 
+package Grouping {
+
+    class Group {
+        Name : string
+    }
+
+    struct GroupId
+    GroupId -|> ElementId
+
+    Group -|> Element
+    Group -> GroupId
+    Group "*" - "*" Element : Groups
+
+}
+
 @enduml
