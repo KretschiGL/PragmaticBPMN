@@ -289,22 +289,29 @@ package Gateways {
 
 package Data {
 
-    abstract class DataElement
-    
-    struct DataId
-    DataId -|> ElementId
+    interface IDataElement {
+        Name : string
+    }
 
-    DataElement -|> Element
-    DataElement -> DataId
-
+    IDataElement -|> IElement
 
     class DataObject
 
-    DataObject -|> DataElement
+    struct DataObjectId
+    DataObjectId -|> ElementId
+
+    DataObject -|> Element
+    DataObject ..|> IDataElement
+    DataObject -> DataObjectId
 
     class DataStore
 
-    DataStore -|> DataElement
+    struct DataStoreId
+    DataStoreId -|> ElementId
+
+    DataStore -|> Element
+    DataStore ..|> IDataElement
+    DataStore -> DataStoreId
 
 }
 
