@@ -67,15 +67,15 @@ class StartEvent {
 
 enum StartEventTypes {
     None
-    Message
-    Timer
-    Error
-    Escalating
     Compensation
     Conditional
-    Signal
+    Error
+    Escalating
+    Message
     Multiple
     ParallelMultiple
+    Signal
+    Timer
 }
 
 StartEvent -|> Event
@@ -87,14 +87,14 @@ class EndEvent {
 
 enum EndEventTypes {
     None
-    Message
-    Error
-    Escalating
     Cancel
     Compensation
+    Error
+    Escalating
+    Message
+    Multiple
     Signal
     Terminate
-    Multiple
 }
 
 EndEvent -|> Event
@@ -106,12 +106,12 @@ class IntermediateThrowingEvent {
 
 enum IntermediateThrowingEventTypes {
     None
-    Message
-    Escalating
     Compensation
+    Escalating
     Link
-    Signal
+    Message
     Multiple
+    Signal
 }
 
 IntermediateThrowingEvent -|> Event
@@ -123,17 +123,17 @@ class IntermediateCatchingEvent {
 
 enum IntermediateCatchingEventTypes {
     None
-    Message
-    Timer
-    Error
-    Escalating
     Cancel
     Compensation
     Conditional
+    Message
+    Error
+    Escalating
     Link
-    Signal
     Multiple
     ParallelMultiple
+    Signal
+    Timer
 }
 
 IntermediateCatchingEvent -|> Event
@@ -145,15 +145,15 @@ class InterruptingBoundaryEvent {
 
 enum InterruptingBoundaryEventTypes {
     None
-    Message
-    Timer
-    Error
-    Escalating
     Compensation
     Conditional
-    Signal
+    Error
+    Escalating
+    Message
     Multiple
     ParallelMultiple
+    Signal
+    Timer
 }
 
 InterruptingBoundaryEvent -|> Event
@@ -165,13 +165,13 @@ class NonInterruptingBoundaryEvent {
 
 enum NonInterruptingBoundaryEventTypes {
     None
-    Message
-    Timer
-    Escalating
     Conditional
-    Signal
+    Escalating
+    Message
     Multiple
     ParallelMultiple
+    Signal
+    Timer
 }
 
 NonInterruptingBoundaryEvent -|> Event
